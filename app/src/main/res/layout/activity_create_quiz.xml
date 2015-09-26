@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:clickable="true">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_select_image"
+        android:id="@+id/button_select_image"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:singleLine="true"/>
+
+    <EditText
+        android:layout_width="310dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_question"
+        android:layout_gravity="center_horizontal"
+        android:hint="@string/hint_question"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/imageView_userInput"
+        android:layout_alignStart="@+id/editText_option"
+        android:imeOptions="actionDone"
+        android:singleLine="true"/>
+
+    <EditText
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_option"
+        android:hint="@string/hint_option"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/editText_question"
+        android:layout_alignEnd="@+id/imageView_userInput"
+        android:imeOptions="actionDone"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgBtn_addOption"
+        android:layout_gravity="right"
+        android:src="@drawable/plus_sign"
+        android:layout_alignBottom="@+id/editText_option"
+        android:layout_alignEnd="@+id/editText_question" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_submit"
+        android:id="@+id/button_submit"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageView_userInput"
+        android:src="@drawable/blank"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/button_select_image"
+        android:layout_centerHorizontal="true" />
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignStart="@+id/editText_option"
+        android:layout_below="@+id/editText_option"
+        android:layout_marginTop="20dp" />
+
+</RelativeLayout>
