@@ -2,17 +2,16 @@ package com.example.elijah.hw3_team8a;
 
 import java.net.URL;
 import java.util.ArrayList;
-
 /**
  * Created by Elijah on 9/25/2015.
  */
-public class QuizCreater {
+public class ServerQuiz {
     private int answerID;
     private String Question;
     private ArrayList<String> userOptions;
     private URL userPic;
 
-    public QuizCreater(String question) {
+    public ServerQuiz(String question) {
         Question = question;
     }
 
