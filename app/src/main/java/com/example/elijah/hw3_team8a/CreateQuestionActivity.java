@@ -40,7 +40,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
     EditText questionText;
     EditText optionText;
-    static RadioGroup radioGroup;
+    private RadioGroup radioGroup;
 
     UserNewQuiz quiz;
 
@@ -112,7 +112,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
                         Log.d("Demo", "URL: " + quiz.getFilePathFinal());
                         Log.d("Demo", "Byte Stream: " + quiz.getURLBitStream());
 
-                        counter = 0;
+
                         Boolean hasImage = false;
 
                         if(!quiz.getFilePathFinal().matches("")) {
@@ -126,7 +126,8 @@ public class CreateQuestionActivity extends AppCompatActivity {
                         }else {
 
                         }
-
+                        optionId = 1;
+                        counter = 0;
                         finish();
                     }
                 }

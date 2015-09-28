@@ -5,6 +5,9 @@ import java.util.ArrayList;
 /**
  * Created by Elijah on 9/26/2015.
  */
+
+// This class is for USER MADE questions in the CreateQuestion Activity, to retrieve API other peoples questions use ServerQuiz
+
 public class UserNewQuiz {
     private String userQuestion = "", URLBitStream = "";
     private String filePath = "";

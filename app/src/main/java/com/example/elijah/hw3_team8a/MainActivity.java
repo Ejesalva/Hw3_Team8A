@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             super.onPreExecute();
             pDialog = new ProgressDialog(MainActivity.this);
             pDialog.setMessage("Deleting All Quiz Questions...");
-
+            pDialog.setCanceledOnTouchOutside(false);
             pDialog.show();
         }
 

@@ -5,17 +5,43 @@ import java.util.ArrayList;
 /**
  * Created by Elijah on 9/25/2015.
  */
-public class ServerQuiz {
-    private int answerID;
-    private String Question;
-    private ArrayList<String> userOptions;
-    private URL userPic;
 
-    public ServerQuiz(String question) {
+// This class is for SERVER MADE questions in the TriviaGame Activity, to retrieve the user made questions use UserNewQuiz Class
+
+public class ServerQuiz {
+    private int answerID, questionID;
+    private String Question;
+    private ArrayList<String> userOptions = new ArrayList<String>();
+    private String userPic;
+
+    public ServerQuiz() {
+    }
+
+    public int getQuestionID() {
+        return questionID;
+    }
+
+    public void setQuestionID(int questionID) {
+        this.questionID = questionID;
+    }
+
+    public void setUserOptions(ArrayList<String> userOptions) {
+        this.userOptions = userOptions;
+    }
+
+    public void setQuestion(String question) {
         Question = question;
     }
 
-    public void setUserPic(URL userPic) {
+    public int getAnswerID() {
+        return answerID;
+    }
+
+    public void setAnswerID(int answerID) {
+        this.answerID = answerID;
+    }
+
+    public void setUserPic(String userPic) {
         this.userPic = userPic;
     }
 
@@ -23,7 +49,7 @@ public class ServerQuiz {
         userOptions.add(option);
     }
 
-    public URL getUserPic() {
+    public String getUserPic() {
         return userPic;
     }
 
