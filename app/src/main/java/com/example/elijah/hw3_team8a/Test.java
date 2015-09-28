@@ -32,7 +32,7 @@ public class Test extends Activity {
         //new GetImageApache().execute("http://www.google.com/images/srpr/logo11w.png");
 
         RequestParams params = new RequestParams("GET", "http://www.google.com/images/srpr/logo11w.png");
-        params.addParam("Key1", "Value1");
+        //params.addParam("Key1", "Value1");
 
         new GetDataParamsHttpURL().execute(params);
 
@@ -41,10 +41,7 @@ public class Test extends Activity {
     private boolean isConnectedOnline(){
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if(networkInfo != null && networkInfo.isConnected()){
-            return true;
-        }
-        return false;
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     //HTTP URL Connection
@@ -130,46 +127,6 @@ public class Test extends Activity {
         }
     }
 
-    //HTTP URL With Params - POST
-	/*
-	private class GetDataParamsHttpPost extends AsyncTask<RequestParams, Void, String>{
-		protected String doInBackground(RequestParams... params){
-			BufferedReader reader = null;
-			try {
-					URL url = new URL(params[0].baseUrl);
-					HttpURLConnection con = (HttpURLConnection) url.openConnection();
-					con.setRequestMethod("POST");
-					con.setDoOutput(true);
-					OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
-					writer.write(params[0].getEncodedParams());
-					writer.flush();
-
-					reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					StringBuilder sb = new StringBuilder();
-					String line = "";
-					while((line = read.readline()) != null){
-						sb.append(line + "\n");
-					}
-				return sb.toString();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					if(reader != null) {
-						reader.close();
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return null;
-		}
-
-		protected void onPostExecute(String results) {
-			Log.d("demo", results);
-		}
-	}
-	*/
-
 
 }
+

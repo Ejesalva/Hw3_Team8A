@@ -10,6 +10,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -34,7 +36,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
     final int REQUIRED_IMG_SIZE = 150;
 
-    String decoded;
+    RequestParams params;
 
     EditText questionText;
     EditText optionText;
@@ -108,9 +110,23 @@ public class CreateQuestionActivity extends AppCompatActivity {
                         Log.d("Demo", "Options: " + quiz.getUserOptionsFinal());
                         Log.d("Demo", "Answer: " + quiz.getAnswerIDFinal());
                         Log.d("Demo", "URL: " + quiz.getFilePathFinal());
-
+                        Log.d("Demo", "Byte Stream: " + quiz.getURLBitStream());
 
                         counter = 0;
+                        Boolean hasImage = false;
+
+                        if(!quiz.getFilePathFinal().matches("")) {
+                            params = new RequestParams("POST", "http://dev.theappsdr.com/apis/trivia_fall15/uploadPhoto.php");
+                            params.addParam("uploaded_file", quiz.getURLBitStream());
+                            hasImage = true;
+                        }
+
+                        if(hasImage){
+
+                        }else {
+
+                        }
+
                         finish();
                     }
                 }
@@ -136,8 +152,17 @@ public class CreateQuestionActivity extends AppCompatActivity {
                         Uri selectedImage = data.getData();         //  Uncomment top, comment out these two lines,
                         Bitmap bitmap = decodeUri(selectedImage);    // If not using image resizer
 
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+
+                        byte [] byteArray = stream.toByteArray();
+                        String imageString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+                        quiz.setURLBitStream(imageString);
+
                         File myFile = new File(selectedImage.getPath());
-                        Log.d("Demo", "File Path: " + myFile.getPath());
+
+                        quiz.setFilePath(myFile.getPath());
 
                         ImageView imageView = (ImageView) findViewById(R.id.imageView_userInput);
                         imageView.setImageBitmap(bitmap);

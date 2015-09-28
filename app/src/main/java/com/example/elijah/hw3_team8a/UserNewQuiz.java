@@ -6,13 +6,21 @@ import java.util.ArrayList;
  * Created by Elijah on 9/26/2015.
  */
 public class UserNewQuiz {
-    private String userQuestion = "";
+    private String userQuestion = "", URLBitStream = "";
     private String filePath = "";
     private ArrayList<String> userOptions = new ArrayList<>();
     private int answerID;
 
     public  UserNewQuiz() {
 
+    }
+
+    public String getURLBitStream() {
+        return URLBitStream;
+    }
+
+    public void setURLBitStream(String URLBitStream) {
+        this.URLBitStream = URLBitStream;
     }
 
     public String getFilePathFinal() {

@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button_startTrivia).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                Intent startQuiz = new Intent(getBaseContext(), TriviaGame.class);
+                startActivity(startQuiz);
             }
         });
 

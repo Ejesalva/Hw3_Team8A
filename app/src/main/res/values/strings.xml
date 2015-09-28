@@ -14,4 +14,10 @@
     <string name="hint_option">Type option here</string>
     <string name="title_activity_create_question">CreateQuestionActivity</string>
     <string name="button_submit">Submit</string>
+    <string name="title">Trivia App</string>
+    <string name="title_activity_trivia_game">TriviaGame</string>
+    <string name="question_number">Number</string>
+    <string name="quit">Quit</string>
+    <string name="quiz_next">Next</string>
+    <string name="quiz_question">Question:</string>
 </resources>
