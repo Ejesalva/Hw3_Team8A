@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 public class ServerQuiz {
     private int answerID, questionID;
-    private String Question;
+    private String Question = "";
     private ArrayList<String> userOptions = new ArrayList<String>();
-    private String userPic;
+    private String userPic = "";
 
     public ServerQuiz() {
     }

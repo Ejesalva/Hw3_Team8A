@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/imageV_quizImage"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/blank"
         android:layout_alignParentTop="true"

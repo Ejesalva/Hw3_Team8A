@@ -20,4 +20,11 @@
     <string name="quit">Quit</string>
     <string name="quiz_next">Next</string>
     <string name="quiz_question">Question:</string>
+    <string name="title_activity_results_page">ResultsPage</string>
+    <string name="results_title">Trivia Results</string>
+    <string name="results_subTitle">Correct Answers</string>
+    <string name="correct_percentage">0%</string>
+    <string name="results_encourage_imperfect">Try again and see if you can get all the correct answers!</string>
+    <string name="results_encourage_perfect">Congratulations! You got a perfect score!</string>
+    <string name="results_tryAgain">Try Again</string>
 </resources>

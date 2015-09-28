@@ -2,6 +2,8 @@ package com.example.elijah.hw3_team8a;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,13 +27,14 @@ import java.util.ArrayList;
 
 public class TriviaGame extends AppCompatActivity {
 
-    private static int counter = 0; //Count Array place
-    private static int quizCounter = 1; //Number of questions that have been answered
-    private static int correct = 0; //Number right answers
+    private int counter = 0; //Count Array place
+    private int quizCounter = 1; //Number of questions that have been answered
+    private int correct = 0; //Number right answers
     private ArrayList<String> questionInfo = new ArrayList<>();
     RadioGroup options;
     ServerQuiz quiz;
     TextView quizQuestion, quizNumber;
+    ImageView serverImage;
 
 
     @Override
@@ -40,6 +44,8 @@ public class TriviaGame extends AppCompatActivity {
         options = (RadioGroup) findViewById(R.id.radiogroup_quiz);
         quizQuestion = (TextView) findViewById(R.id.quiz_question);
         quizNumber = (TextView) findViewById(R.id.textV_quizNumber);
+        serverImage = (ImageView) findViewById(R.id.imageV_quizImage);
+
         questionInfo = new ArrayList<String>();
 
 
@@ -50,6 +56,10 @@ public class TriviaGame extends AppCompatActivity {
         findViewById(R.id.quiz_quit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                counter = 0; //Reset Count Array place
+                quizCounter = 1; //Reset Number of questions that have been answered
+                correct = 0; //Reset Number of right answers
+
                 finish();
             }
         });
@@ -57,21 +67,36 @@ public class TriviaGame extends AppCompatActivity {
         findViewById(R.id.quiz_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(options.getCheckedRadioButtonId() == -1){
+                if(options.getCheckedRadioButtonId() == -1) {
                     Toast.makeText(TriviaGame.this, "Plese choose an answer", Toast.LENGTH_SHORT).show();
                 } else {
-                    quiz.setAnswerID(options.getCheckedRadioButtonId());
 
-                    Log.d("test userAnswer: ", String.valueOf(quiz.getAnswerID()));
-                    counter++;
-                    parser(questionInfo.get(counter));
-                    populator();
+                    if(quizCounter < 5) {
+                        quiz.setAnswerID(options.getCheckedRadioButtonId());
+                        RequestParams params = new RequestParams("POST", " http://dev.theappsdr.com/apis/trivia_fall15/checkAnswer.php");
+                        params.addParam("gid", "e871e9df5b6b15411af5ec81c10adcad");
+                        params.addParam("qid", String.valueOf(quiz.getQuestionID()));
+                        params.addParam("a", String.valueOf(quiz.getAnswerID()));
+                        new GetAnswer().execute(params);
 
-                    RequestParams params = new RequestParams("POST", " http://dev.theappsdr.com/apis/trivia_fall15/checkAnswer.php");
-                    params.addParam("gid", "e871e9df5b6b15411af5ec81c10adcad");
-                    params.addParam("qid", String.valueOf(quiz.getQuestionID()));
-                    params.addParam("a", String.valueOf(quiz.getAnswerID()));
-                    new GetAnswer().execute(params);
+                        options.clearCheck();
+
+                        counter++;
+                        parser(questionInfo.get(counter));
+                        populator();
+                    } else{
+                        quiz.setAnswerID(options.getCheckedRadioButtonId());
+                        RequestParams params = new RequestParams("POST", " http://dev.theappsdr.com/apis/trivia_fall15/checkAnswer.php");
+                        params.addParam("gid", "e871e9df5b6b15411af5ec81c10adcad");
+                        params.addParam("qid", String.valueOf(quiz.getQuestionID()));
+                        params.addParam("a", String.valueOf(quiz.getAnswerID()));
+                        new GetAnswer().execute(params);
+
+                        Intent resultPage = new Intent(getBaseContext(),ResultsPage.class);
+                        resultPage.putExtra("numCorrect", correct);
+                        resultPage.putExtra("numQuestions", quizCounter - 1);
+                        startActivity(resultPage);
+                    }
                 }
             }
         });
@@ -92,9 +117,6 @@ public class TriviaGame extends AppCompatActivity {
             } else if(ss[i].matches("") || ss[i].matches("-1")){
                 //No picture
             } else {
-                Log.d("test Index: ", String.valueOf(i));
-                Log.d("test Value: ", ss[i]);
-                Log.d("test Length: ", String.valueOf(ss.length));
                 RadioButton rdbtn = new RadioButton(TriviaGame.this);
                 rdbtn.setText(ss[i]);
                 options.addView(rdbtn);
@@ -107,6 +129,14 @@ public class TriviaGame extends AppCompatActivity {
         quizQuestion.setText(quiz.getQuestion());
         quizNumber.setText(String.valueOf(quizCounter));
         quizCounter++;
+
+        Log.d("text URL: ", quiz.getUserPic());
+
+        if(quiz.getUserPic().matches("")){
+            serverImage.setImageResource(R.drawable.blank);
+        } else {
+            new GetImage().execute(quiz.getUserPic());
+        }
     }
 
     private class GetData extends AsyncTask<RequestParams, Void, String> {
@@ -121,10 +151,9 @@ public class TriviaGame extends AppCompatActivity {
                 reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line = "";
-                while((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null) {
                     sb.append(line + "\n");
                     questionInfo.add(line);
-                    Log.d("demo", line);
                 }
                 return sb.toString();
             } catch (IOException e) {
@@ -178,17 +207,20 @@ public class TriviaGame extends AppCompatActivity {
         }
     }
 
-    private class GetAnswer extends AsyncTask<RequestParams, Void, Void> {
+    private class GetAnswer extends AsyncTask<RequestParams, Void, Integer> {
+        String answerResult = "";
 
 
-        protected Void doInBackground(RequestParams... params){
+        protected Integer doInBackground(RequestParams... params){
             BufferedReader reader = null;
 
             try {
                 HttpURLConnection con = params[0].setupConnection();
                 reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                correct += Integer.valueOf(reader.readLine());
-                Log.d("test Answer: ", String.valueOf(correct));
+                answerResult = reader.readLine();
+                correct += Integer.valueOf(answerResult);
+
+                return Integer.valueOf(answerResult);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -201,6 +233,50 @@ public class TriviaGame extends AppCompatActivity {
                 }
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if(result == 0){
+                Toast.makeText(TriviaGame.this, "Incorrect", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(TriviaGame.this, "Correct!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class GetImage extends AsyncTask<String, Void, Bitmap>{
+        ProgressDialog pDialog;
+
+        protected Bitmap doInBackground(String... params){
+            try {
+                URL url = new URL(params[0]);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                Bitmap bitmap = BitmapFactory.decodeStream(con.getInputStream());
+                return bitmap;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(TriviaGame.this);
+            pDialog.setMessage("Loading Images...");
+            pDialog.setCanceledOnTouchOutside(false);
+            pDialog.show();
+        }
+
+        protected void onPostExecute(Bitmap results) {
+            ImageView iv = (ImageView) findViewById(R.id.imageV_quizImage);
+
+            if(results != null) {
+                iv.setImageBitmap(results);
+            }
+            pDialog.dismiss();
         }
     }
 }
