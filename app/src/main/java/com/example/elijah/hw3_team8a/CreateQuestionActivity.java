@@ -32,7 +32,7 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 1;
     private static int counter = 0; //Counts number of user answer options, used to validate if there are between 2-7 options
-    private static int optionId = 1; //ID for options that will be used later to test answer
+    private static int optionId = 0; //ID for options that will be used later to test answer
 
     final int REQUIRED_IMG_SIZE = 150;
 
@@ -80,6 +80,8 @@ public class CreateQuestionActivity extends AppCompatActivity {
 
                             RadioButton rdbtn = new RadioButton(CreateQuestionActivity.this);
                             rdbtn.setText(optionId + " " + optionText.getText().toString());
+                            //noinspection ResourceType
+                            rdbtn.setId(optionId);
 
                             quiz.addOption(optionText.getText().toString());
                             radioGroup.addView(rdbtn);

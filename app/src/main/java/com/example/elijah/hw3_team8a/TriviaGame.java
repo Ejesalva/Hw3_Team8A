@@ -30,6 +30,7 @@ public class TriviaGame extends AppCompatActivity {
     private int counter = 0; //Count Array place
     private int quizCounter = 1; //Number of questions that have been answered
     private int correct = 0; //Number right answers
+    private int optionCounter = 0;
     private ArrayList<String> questionInfo = new ArrayList<>();
     RadioGroup options;
     ServerQuiz quiz;
@@ -71,8 +72,9 @@ public class TriviaGame extends AppCompatActivity {
                     Toast.makeText(TriviaGame.this, "Plese choose an answer", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    if(quizCounter < 5) {
+                    if(quizCounter < questionInfo.size()-1) {
                         quiz.setAnswerID(options.getCheckedRadioButtonId());
+                        Log.d("test","answer: " + String.valueOf(quiz.getAnswerID()));
                         RequestParams params = new RequestParams("POST", " http://dev.theappsdr.com/apis/trivia_fall15/checkAnswer.php");
                         params.addParam("gid", "e871e9df5b6b15411af5ec81c10adcad");
                         params.addParam("qid", String.valueOf(quiz.getQuestionID()));
@@ -86,6 +88,7 @@ public class TriviaGame extends AppCompatActivity {
                         populator();
                     } else{
                         quiz.setAnswerID(options.getCheckedRadioButtonId());
+                        Log.d("test", "answer: " + String.valueOf(quiz.getAnswerID()));
                         RequestParams params = new RequestParams("POST", " http://dev.theappsdr.com/apis/trivia_fall15/checkAnswer.php");
                         params.addParam("gid", "e871e9df5b6b15411af5ec81c10adcad");
                         params.addParam("qid", String.valueOf(quiz.getQuestionID()));
@@ -104,6 +107,7 @@ public class TriviaGame extends AppCompatActivity {
 
     private void parser(String quizInfo){
         options.removeAllViews();
+        optionCounter = 0;
 
         quiz = new ServerQuiz();
         String[] ss=quizInfo.split(";");
@@ -119,8 +123,11 @@ public class TriviaGame extends AppCompatActivity {
             } else {
                 RadioButton rdbtn = new RadioButton(TriviaGame.this);
                 rdbtn.setText(ss[i]);
+                //noinspection ResourceType
+                rdbtn.setId(optionCounter);
                 options.addView(rdbtn);
                 quiz.addUserOptions(ss[i]);
+                optionCounter++;
             }
         }
     }
